@@ -98,7 +98,7 @@ The plugin also provides a taglib.
 # Defining custom whitelists
 
 Plugin provides a DSL to define custom whitelists in configuration.
-Define a custom whitelist sample that will allow just <b>,<i>,<p> and <span> tags.
+Define a custom whitelist sample that will allow just *b*, *i*, *p* and *span* tags.
 
 application.groovy
 
@@ -117,11 +117,11 @@ grails {
 }
 ```
 
-The above configuration would define a whitelist with name sample that builds on top of whitelist none and allows additional tags <b>,<i>,<p> and <span>
+The above configuration would define a whitelist with name sample that builds on top of whitelist none and allows additional tags *b*, *i*, *p* and *span*.
 
 A whitelist can start with any of the default whitelists or A whitelist can start with any custom whitelists that are defined earlier in configuration as well, but it must start with another whitelist.
 
-Define a whitelist sample2 that starts with whitelist sample we defined above and allows tag <a> with just one attribute href and puts rel="nofollow"
+Define a whitelist sample2 that starts with whitelist sample we defined above and allows tag *a* with just one attribute href and puts rel="nofollow"
 
 ```
 grails {
