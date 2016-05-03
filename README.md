@@ -2,7 +2,7 @@ Html Cleaner Grails Plugin
 ==========================
 
 [![Build Status](https://travis-ci.org/agorapulse/grails-html-cleaner.png)](https://travis-ci.org/agorapulse/grails-html-cleaner)
-
+[![Download](https://api.bintray.com/packages/agorapulse/plugins/html-cleaner/images/download.svg)](https://bintray.com/agorapulse/plugins/html-cleaner/_latestVersion)
 
 # Introduction
 
@@ -27,7 +27,7 @@ repositories {
 }
 dependencies {
     ...
-    compile "org.grails.plugins:html-cleaner:1.0"
+    compile "org.grails.plugins:html-cleaner:1.1"
 }
 ```
 
