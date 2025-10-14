@@ -1,74 +1,74 @@
 package grails.plugin.htmlcleaner
 
-import org.jsoup.safety.Whitelist
+import org.jsoup.safety.Safelist
 
-class WhitelistBuilder {
+class SafelistBuilder {
 
 	private static final List RESERVED_WHITELISTS = ['none', 'simpleText', 'basic', 'basicWithImages', 'relaxed']
-	private final Map whiteLists = [:]
+	private final Map safeLists = [:]
 
-	private Whitelist currentWhitelist
+	private Safelist currentSafelist
 	private String currentTag
 
-	Map<String, Whitelist> build(Closure c) {
+	Map<String, Safelist> build(Closure c) {
 		if(c) {
 			c.delegate = this
 			c.resolveStrategy = Closure.DELEGATE_ONLY
 			c.call()
 		}
-		return whiteLists
+		return safeLists
 	}
 
-	def whitelist(String name, Closure c) {
+	def safelist(String name, Closure c) {
 		if(!name) {
-			throw new RuntimeException("Whitelist must have a name")
+			throw new RuntimeException("Safelist must have a name")
 		}
 		if(RESERVED_WHITELISTS.contains(name)) {
-			throw new RuntimeException("Whitelist name [${name}] is reserved")
+			throw new RuntimeException("Safelist name [${name}] is reserved")
 		}
 		if(c) {
 			c.delegate = this
 			c.resolveStrategy = Closure.DELEGATE_ONLY
 			c.call()
-			whiteLists[name] = currentWhitelist
+			safeLists[name] = currentSafelist
 		}
 	}
 
 	def startwith(String name) {
-		currentWhitelist = null
+		currentSafelist = null
 		switch (name) {
 			case "basic":
-				currentWhitelist = Whitelist.basic()
+				currentSafelist = Safelist.basic()
 				break
 			case "none":
-				currentWhitelist = Whitelist.none()
+				currentSafelist = Safelist.none()
 				break
 			case "simpleText":
-				currentWhitelist = Whitelist.simpleText()
+				currentSafelist = Safelist.simpleText()
 				break
 			case "basicWithImages":
-				currentWhitelist = Whitelist.basicWithImages()
+				currentSafelist = Safelist.basicWithImages()
 				break
 			case "relaxed":
-				currentWhitelist = Whitelist.relaxed()
+				currentSafelist = Safelist.relaxed()
 				break
 			default:
-				currentWhitelist = whiteLists[name]
+				currentSafelist = safeLists[name]
 		}
-		if(!currentWhitelist) {
-			throw new RuntimeException("Whitelist [${name}] is not defined")
+		if(!currentSafelist) {
+			throw new RuntimeException("Safelist [${name}] is not defined")
 		}
 	}
 
 	def allow(String[] tags) {
 		tags.each {
-			currentWhitelist.addTags(it)
+			currentSafelist.addTags(it)
 		}
 	}
 
 	def allow(String name, Closure c) {
 		if(name) {
-			currentWhitelist.addTags(name)
+			currentSafelist.addTags(name)
 			currentTag = name
 		}
 		if(c) {
@@ -80,13 +80,13 @@ class WhitelistBuilder {
 
 	def attributes(String[] attrs) {
 		attrs.each {
-			currentWhitelist.addAttributes(currentTag, it)
+			currentSafelist.addAttributes(currentTag, it)
 		}
 	}
 
 	def enforce(Map attr) {
 		if(attr) {
-			currentWhitelist.addEnforcedAttribute(currentTag, attr.attribute, attr.value)
+			currentSafelist.addEnforcedAttribute(currentTag, attr.attribute, attr.value)
 		}
 	}
 
@@ -98,7 +98,7 @@ class WhitelistBuilder {
         List values = map.value instanceof String ? [ map.value ] : map.value
 
         values.each { String protocol ->
-            currentWhitelist.addProtocols(currentTag, map.attribute, protocol)
+            currentSafelist.addProtocols(currentTag, map.attribute, protocol)
         }
     }
 }
