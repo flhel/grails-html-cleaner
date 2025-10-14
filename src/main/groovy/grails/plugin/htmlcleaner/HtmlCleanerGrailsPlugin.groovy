@@ -4,7 +4,7 @@ import grails.plugins.*
 
 class HtmlCleanerGrailsPlugin extends Plugin {
 
-    def grailsVersion = "3.0.0 > *"
+    def grailsVersion = "6.0.0 > *"
 
     def title = "Html Cleaner"
     def author = "Benoit Hediard"
