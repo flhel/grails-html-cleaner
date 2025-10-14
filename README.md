@@ -1,7 +1,7 @@
 Html Cleaner Grails Plugin
 ==========================
 
-Updated to work with Grails 6 and newer Version of Jsoup 
+Updated to work with Grails 6 and newer versions of Jsoup 
 
 New Jsoup versions (≥ 1.14.1): ❌ org.jsoup.safety.Whitelist → ✅ org.jsoup.safety.Safelist
 
