@@ -1,15 +1,15 @@
 package grails.plugin.htmlcleaner
 
-import org.jsoup.safety.Whitelist
+import org.jsoup.safety.Safelist
 import spock.lang.Specification
 
 
-class WhitelistBuilderSpec extends Specification {
+class SafelistBuilderSpec extends Specification {
 
-	private WhitelistBuilder builder = new WhitelistBuilder()
+	private SafelistBuilder builder = new SafelistBuilder()
 
 	def confSuccess = {
-		whitelist("sample") {
+		safelist("sample") {
 			startwith "basic"
 			allow "b", "p", "img"
 			allow("a") {
@@ -19,7 +19,7 @@ class WhitelistBuilderSpec extends Specification {
 			}
 		}
 
-		whitelist("sample2") {
+		safelist("sample2") {
 			startwith "none"
 			allow "b", "p", "img"
 			allow("a") {
@@ -29,7 +29,7 @@ class WhitelistBuilderSpec extends Specification {
 			}
 		}
 
-		whitelist("sample3") {
+		safelist("sample3") {
 			startwith "sample2"
 			allow "span"
             allow("a") {
@@ -41,26 +41,26 @@ class WhitelistBuilderSpec extends Specification {
 		}
 	}
 
-	def confWhitelistStartsWithUndefinedWhitelist = {
-		whitelist("sample") {
+	def confSafelistStartsWithUndefinedSafelist = {
+		safelist("sample") {
 			startwith "undefined"
 			allow "b", "p", "img"
 		}
 	}
 
-	def confWhitelistWithReservedName = {
-		whitelist("none") {
+	def confSafelistWithReservedName = {
+		safelist("none") {
 			startwith "basic"
 			allow "b", "p", "img"
 		}
     }
 
-	void "Build whitelist"() {
+	void "Build safelist"() {
         given:
 		Integer numCalled = 0
 
-        // Need to verify addProtocols() getting called properly, but no get method available on Whitelists. MetaClass gets rolled back so should not leak.
-        Whitelist.metaClass.addProtocols = { String tagName, String attribute, String protocol ->
+        // Need to verify addProtocols() getting called properly, but no get method available on Safelists. MetaClass gets rolled back so should not leak.
+        Safelist.metaClass.addProtocols = { String tagName, String attribute, String protocol ->
             assert tagName == 'a'
             assert attribute == 'href'
             assert protocol in [ 'http', 'https']
@@ -68,31 +68,31 @@ class WhitelistBuilderSpec extends Specification {
         }
 
         when:
-        Map whiteLists = builder.build(confSuccess)
+        Map safeLists = builder.build(confSuccess)
 
         then:
-		whiteLists
-		whiteLists['sample']
-		whiteLists['sample2']
-		whiteLists['sample3']
+		safeLists
+		safeLists['sample']
+		safeLists['sample2']
+		safeLists['sample3']
         numCalled == 5 // One for each valid protocol in the three sample configs.
 	}
 
-	void "Build whitelist with undefined whitelist"() {
+	void "Build safelist with undefined safelist"() {
         when:
-        builder.build(confWhitelistStartsWithUndefinedWhitelist)
+        builder.build(confSafelistStartsWithUndefinedSafelist)
 
         then:
         RuntimeException ex = thrown()
-        ex.message == "Whitelist [undefined] is not defined"
+        ex.message == "Safelist [undefined] is not defined"
 	}
 
-	void "Build whitelist with reserved names"() {
+	void "Build safelist with reserved names"() {
         when:
-        builder.build(confWhitelistWithReservedName)
+        builder.build(confSafelistWithReservedName)
 
         then:
         RuntimeException ex = thrown()
-        ex.message == "Whitelist name [none] is reserved"
+        ex.message == "Safelist name [none] is reserved"
 	}
 }
