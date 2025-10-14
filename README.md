@@ -1,8 +1,9 @@
 Html Cleaner Grails Plugin
 ==========================
 
-[![Build Status](https://travis-ci.org/agorapulse/grails-html-cleaner.png)](https://travis-ci.org/agorapulse/grails-html-cleaner)
-[![Download](https://api.bintray.com/packages/agorapulse/plugins/html-cleaner/images/download.svg)](https://bintray.com/agorapulse/plugins/html-cleaner/_latestVersion)
+Updated to work with Grails 6 and newer Version of Jsoup 
+
+New Jsoup versions (≥ 1.14.1): ❌ org.jsoup.safety.Whitelist → ✅ org.jsoup.safety.Safelist
 
 # Introduction
 
