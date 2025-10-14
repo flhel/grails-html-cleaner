@@ -2,62 +2,62 @@ package grails.plugin.htmlcleaner
 
 import grails.core.GrailsApplication
 import org.jsoup.Jsoup
-import org.jsoup.safety.Whitelist
+import org.jsoup.safety.Safelist
 import org.springframework.beans.factory.InitializingBean
 
 class HtmlCleaner implements InitializingBean {
 
-    String defaultWhiteList
+    String defaultSafeList
     GrailsApplication grailsApplication
 
-    private final Map<String, Whitelist> whitelists = [:]
+    private final Map<String, Safelist> safelists = [:]
 
     void afterPropertiesSet() throws Exception {
-        defaultWhiteList = pluginConfig?.defaultWhiteList
-        buildWhitelists()
+        defaultSafeList = pluginConfig?.defaultSafeList
+        buildSafelists()
     }
 
     /**
      *
      * @param html
-     * @param whitelist
+     * @param safelist
      * @return
      */
-    String cleanHtml(String html, String whitelist = '') {
+    String cleanHtml(String html, String safelist = '') {
         if (!html) {
             return html
         }
-        if (!whitelist) {
-            whitelist = defaultWhiteList
+        if (!safelist) {
+            safelist = defaultSafeList
         }
-        if (!whitelist) {
-            throw new RuntimeException("Default Whitelist is not specified in configuration")
+        if (!safelist) {
+            throw new RuntimeException("Default Safelist is not specified in configuration")
         }
 
-        if (!whitelists[whitelist]) {
-            throw new RuntimeException("Whitelist [${whitelist}] is not defined")
+        if (!safelists[safelist]) {
+            throw new RuntimeException("Safelist [${safelist}] is not defined")
         }
-        Jsoup.clean(html, whitelists[whitelist])
+        Jsoup.clean(html, safelists[safelist])
     }
 
     // PRIVATE
 
-    private void buildWhitelists() {
-        //Clear all existing whitelists
-        whitelists.clear()
+    private void buildSafelists() {
+        //Clear all existing safelists
+        safelists.clear()
 
-        def whitelistsClosure = pluginConfig?.whitelists
-        if (whitelistsClosure && whitelistsClosure instanceof Closure) {
-            WhitelistBuilder builder = new WhitelistBuilder()
-            whitelists.putAll(builder.build(whitelistsClosure))
+        def safelistsClosure = pluginConfig?.safelists
+        if (safelistsClosure && safelistsClosure instanceof Closure) {
+            SafelistBuilder builder = new SafelistBuilder()
+            safelists.putAll(builder.build(safelistsClosure))
         }
 
-        //Add default whitelists
-        whitelists['none'] = Whitelist.none()
-        whitelists['basic'] = Whitelist.basic()
-        whitelists['simpleText'] = Whitelist.simpleText()
-        whitelists['basicWithImages'] = Whitelist.basicWithImages()
-        whitelists['relaxed'] = Whitelist.relaxed()
+        //Add default safelists
+        safelists['none'] = Safelist.none()
+        safelists['basic'] = Safelist.basic()
+        safelists['simpleText'] = Safelist.simpleText()
+        safelists['basicWithImages'] = Safelist.basicWithImages()
+        safelists['relaxed'] = Safelist.relaxed()
     }
 
     private def getPluginConfig() {
