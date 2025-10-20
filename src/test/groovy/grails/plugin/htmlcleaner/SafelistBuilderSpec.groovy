@@ -1,10 +1,11 @@
 package grails.plugin.htmlcleaner
 
+import grails.testing.services.ServiceUnitTest
 import org.jsoup.safety.Safelist
 import spock.lang.Specification
 
 
-class SafelistBuilderSpec extends Specification {
+class SafelistBuilderSpec extends Specification implements ServiceUnitTest<SafelistBuilderSpec> {
 
 	private SafelistBuilder builder = new SafelistBuilder()
 

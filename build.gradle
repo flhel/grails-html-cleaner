@@ -9,7 +9,7 @@ apply plugin: "org.grails.grails-gsp"
 ext {
     grailsVersion = project.findProperty("grailsVersion") ?: "6.0.0"
     gradleWrapperVersion = project.findProperty("gradleWrapperVersion") ?: "7.6.2"
-    jsoupVersion = project.findProperty("jsoupVersion") ?: "1.21.2"
+    jsoupVersion = project.findProperty("jsoupVersion") ?: "1.16.1"
 }
 
 repositories {
@@ -38,6 +38,9 @@ dependencies {
 
     compileOnly "org.grails:grails-plugin-services"
     compileOnly "org.grails:grails-plugin-domain-class"
+
+    testImplementation "org.grails:grails-testing-support"
+    testImplementation "org.spockframework:spock-core:2.3-groovy-3.0"
 
     implementation "org.jsoup:jsoup:$jsoupVersion"
 }
