@@ -1,18 +1,15 @@
 plugins {
-    id "org.grails.grails-plugin" version "6.0.0"   // adjust to your Grails version (e.g., 5.x or 6.x)
-    id "org.grails.grails-plugin-publish"
-    id "org.grails.grails-gsp"
+    id "org.grails.grails-plugin" version "6.0.0" // Adjust to your Grails version
     id "idea"
     id "eclipse"
 }
 
-version = "1.1"
-group = "org.grails.plugins"
+apply plugin: "org.grails.grails-gsp"
 
 ext {
-    grailsVersion = project.hasProperty('grailsVersion') ? project.grailsVersion : '6.0.0'
-    gradleWrapperVersion = project.hasProperty('gradleWrapperVersion') ? project.gradleWrapperVersion : '7.6.2'
-    jsoupVersion = project.hasProperty('jsoupVersion') ? project.jsoupVersion : '1.18.1'
+    grailsVersion = project.findProperty("grailsVersion") ?: "6.0.0"
+    gradleWrapperVersion = project.findProperty("gradleWrapperVersion") ?: "7.6.2"
+    jsoupVersion = project.findProperty("jsoupVersion") ?: "1.21.2"
 }
 
 repositories {
@@ -24,44 +21,28 @@ dependencyManagement {
     imports {
         mavenBom "org.grails:grails-bom:$grailsVersion"
     }
-    applyMavenExclusions = false
 }
 
 dependencies {
     implementation "org.springframework.boot:spring-boot-starter-logging"
     implementation "org.springframework.boot:spring-boot-autoconfigure"
-    implementation "org.grails:grails-core"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
     implementation "org.springframework.boot:spring-boot-starter-tomcat"
+
+    implementation "org.grails:grails-core"
     implementation "org.grails:grails-dependencies"
     implementation "org.grails:grails-web-boot"
 
-    consoleOnly "org.grails:grails-console"
+    console "org.grails:grails-console"
     profile "org.grails.profiles:web-plugin"
 
     compileOnly "org.grails:grails-plugin-services"
     compileOnly "org.grails:grails-plugin-domain-class"
 
-    testImplementation "org.grails:grails-plugin-testing"
-
-    // JSoup library
     implementation "org.jsoup:jsoup:$jsoupVersion"
 }
 
-tasks.named('wrapper') {
+tasks.wrapper {
     gradleVersion = gradleWrapperVersion
     distributionType = Wrapper.DistributionType.ALL
-}
-
-grailsPublish {
-    userOrg = 'agorapulse'
-    githubSlug = 'agorapulse/grails-html-cleaner'
-    license {
-        name = 'Apache-2.0'
-    }
-    title = "html-cleaner"
-    desc = "Grails HTML Cleaner plugin"
-    developers = [benorama: "Benoit Hediard"]
-    portalUser = ""
-    portalPassword = ""
 }
